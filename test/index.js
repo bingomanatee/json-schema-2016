@@ -139,6 +139,40 @@ describe('json-schema-2015', function () {
 
   describe('#validate', function () {
 
+    describe('array', function () {
+      let instanceArray;
+
+      beforeEach(function () {
+        instanceArray = jsonSchema({type: ARRAY});
+      });
+
+      it('should return true on an array', function () {
+        expect(instanceArray.validate([1, 2])).to.be.true;
+      });
+
+      it('should return false on a non array', function () {
+        expect(instanceArray.validate(2)).to.be.false;
+      });
+
+    });
+
+    describe('number', function () {
+      let instanceNumber;
+
+      beforeEach(function () {
+        instanceNumber = jsonSchema({type: NUMBER});
+      });
+
+      it('should return true on an number', function () {
+        expect(instanceNumber.validate(2)).to.be.true;
+      });
+
+      it('should return false on a non number', function () {
+        expect(instanceNumber.validate('2')).to.be.false;
+      });
+
+    });
+
     describe('string', function () {
       let instanceString;
 
@@ -148,7 +182,6 @@ describe('json-schema-2015', function () {
       });
 
       it('should return true on a string', function () {
-        /* eslint no-unused-expressions: 0 */
         expect(instanceString.validate('foo')).to.be.true;
       });
 
