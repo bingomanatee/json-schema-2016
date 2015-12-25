@@ -7,7 +7,7 @@ const NUMBER = 'number';
 const ARRAY = 'array';
 const SITE_ID = 'http://www.my_site.schema';
 
-describe('json-schema-2015', function () {
+describe('json-schema', function () {
   describe('#constructor', function () {
     it('should crash on no parameter', function () {
       expect(() => jsonSchema()).to.throw(/schema cannot be empty/);
@@ -24,7 +24,7 @@ describe('json-schema-2015', function () {
     describe('with fields but no id', function () {
       let withProps;
 
-      const BETTER_SCHEMA = {properties: {alpha: STRING, beta: NUMBER}};
+      const BETTER_SCHEMA = {type: 'object', properties: {alpha: STRING, beta: NUMBER}};
       beforeEach(function () {
         withProps = jsonSchema(BETTER_SCHEMA);
       });
@@ -77,7 +77,7 @@ describe('json-schema-2015', function () {
   describe('#id', function () {
     let parentSchema;
     beforeEach(function () {
-      parentSchema = jsonSchema({properties: {foo: STRING}});
+      parentSchema = jsonSchema({type: 'object', properties: {foo: STRING}});
     });
 
     it('should reject an invalid id', function () {
@@ -93,7 +93,7 @@ describe('json-schema-2015', function () {
       /* eslint no-unused-expressions: 0, indent: 0 */
       expect(function () {
         jsonSchema({
-            id: 'something wrong', properties: {name: STRING}
+            id: 'something wrong', type: 'object', properties: {name: STRING}
           },
           parentSchema, 'foo'
         );
