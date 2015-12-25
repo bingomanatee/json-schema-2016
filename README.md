@@ -13,9 +13,10 @@ $ npm install --save json-schema-2015
 ## Usage
 
 ```js
-var jsonSchema2015 = require('json-schema-2015');
+var jsonSchema = require('json-schema-2015');
 
-jsonSchema2015('Rainbow');
+jsonSchema({schemaDefinition: true});
+
 ```
 ## License
 
