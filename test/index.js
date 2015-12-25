@@ -4,6 +4,7 @@ import jsonSchema from '../lib';
 
 const STRING = 'string';
 const NUMBER = 'number';
+const BOOLEAN = 'boolean';
 const ARRAY = 'array';
 const SITE_ID = 'http://www.my_site.schema';
 import util from 'util';
@@ -36,16 +37,11 @@ describe('json-schema', function () {
       });
 
       it('#id', function () {
-        expect(withProps.id).to.equal('');
+        expect(withProps.id).to.be.null;
       });
 
       it('#fieldCount', function () {
         expect(withProps.fieldCount).to.equal(2);
-      });
-
-      it('should reject empty field definitions', function () {
-        expect(() => jsonSchema({foo: false})).to.throw(/empty value for property/);
-
       });
 
       describe('with id', function () {
@@ -140,6 +136,26 @@ describe('json-schema', function () {
 
   describe('#validate', function () {
 
+    describe('boolean', function () {
+      let instanceBool;
+
+      beforeEach(function () {
+        instanceBool = jsonSchema({type: BOOLEAN});
+      });
+
+      it('should validate true', function () {
+        expect(instanceBool.validate(true)).to.be.true;
+      });
+
+      it('should validate false', function () {
+        expect(instanceBool.validate(false)).to.be.true;
+      });
+
+      it('should return an error for a string', function () {
+        expect(instanceBool.validate('')).to.be.false;
+      });
+    });
+
     describe('array', function () {
       let instanceArray;
 
@@ -179,7 +195,6 @@ describe('json-schema', function () {
 
       beforeEach(function () {
         instanceString = jsonSchema({type: STRING});
-
       });
 
       it('should return true on a string', function () {
@@ -188,8 +203,24 @@ describe('json-schema', function () {
 
       it('should return false on a number', function () {
 
-        /* eslint no-unused-expressions: 0 */
         expect(instanceString.validate(3)).to.be.false;
+      });
+
+      describe('with minLength', function () {
+        let instanceMin;
+
+        beforeEach(function () {
+          instanceMin = jsonSchema({type: STRING, minLength: 5});
+        });
+
+        it('should be valid for long strings', function () {
+          expect(instanceMin.validate('fooooooo')).to.be.true;
+        });
+
+        it('should be invalid for short strings', function () {
+          expect(instanceMin.validate('foo')).to.be.false;
+        });
+
       });
 
       describe('with pattern', function () {
