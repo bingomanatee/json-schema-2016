@@ -128,9 +128,36 @@ describe('json-schema-2015', function () {
     });
 
     describe('strange type', function () {
-      expect(() => jsonSchema({type: 'foo'})).to.throw(/bad type/);
+      it('should throw error', function () {
+        expect(function () {
+          jsonSchema({type: 'foo'});
+        }).to.throw(/bad type/);
+      });
     });
 
+  });
+
+  describe('#validate', function () {
+
+    describe('string', function () {
+      let instanceString;
+
+      beforeEach(function () {
+        instanceString = jsonSchema({type: STRING});
+
+      });
+
+      it('should return true on a string', function () {
+        /* eslint no-unused-expressions: 0 */
+        expect(instanceString.validate('foo')).to.be.true;
+      });
+
+      it('should return false on a number', function () {
+
+        /* eslint no-unused-expressions: 0 */
+        expect(instanceString.validate(3)).to.be.false;
+      });
+    });
   });
 
 });
