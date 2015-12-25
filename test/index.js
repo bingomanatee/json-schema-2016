@@ -6,6 +6,7 @@ const STRING = 'string';
 const NUMBER = 'number';
 const ARRAY = 'array';
 const SITE_ID = 'http://www.my_site.schema';
+import util from 'util';
 
 describe('json-schema', function () {
   describe('#constructor', function () {
@@ -189,6 +190,22 @@ describe('json-schema', function () {
 
         /* eslint no-unused-expressions: 0 */
         expect(instanceString.validate(3)).to.be.false;
+      });
+
+      describe('with pattern', function () {
+        let instancePatternedString;
+
+        beforeEach(function () {
+          instancePatternedString = jsonSchema({type: 'string', pattern: '^[\\d]{3}-[\\d]{3}-[\\d]{4}$'});
+        });
+
+        it('should accept a valid phone number pattern', function () {
+          expect(instancePatternedString.validate('111-222-3333')).to.be.true;
+        });
+
+        it('should reject an invalid phone number pattern', function () {
+          expect(instancePatternedString.validate('111-222-333')).to.be.false;
+        });
       });
     });
   });
